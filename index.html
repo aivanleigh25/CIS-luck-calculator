@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pet Luck Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <h1>🐾 Pet Luck Calculator</h1>
+    <p>Check your odds with luck multipliers!</p>
+
+    <div class="calculator">
+      <label for="petSelect">Choose a pet:</label>
+      <select id="petSelect">
+        <option value="forest">🌲 Forest Guardian (1 / 1,000,000)</option>
+        <option value="deck">🃏 Deck Master (1 / 1,333,333)</option>
+      </select>
+
+      <div class="pet-image">
+        <img id="petImg" src="forest.png" alt="Pet Image">
+      </div>
+
+      <label for="luckInput">Enter your Luck Multiplier (x):</label>
+      <input type="number" id="luckInput" step="0.01" placeholder="e.g. 14">
+
+      <button onclick="calculateOdds()">Calculate</button>
+
+      <div class="result">
+        <p id="oddsText">🎲 Your odds will appear here</p>
+        <p id="percentText"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
