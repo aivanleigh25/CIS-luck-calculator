@@ -1,25 +1,25 @@
-document.getElementById("calcForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+// Generate bubbles
+const bubblesContainer = document.querySelector('.bubbles');
+for (let i = 0; i < 20; i++) {
+  const bubble = document.createElement('span');
+  bubble.style.width = bubble.style.height = `${Math.random() * 60 + 20}px`;
+  bubble.style.left = `${Math.random() * 100}%`;
+  bubble.style.animationDuration = `${10 + Math.random() * 10}s`;
+  bubble.style.background = `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, 255, 0.25)`;
+  bubblesContainer.appendChild(bubble);
+}
 
-  const baseOdds = parseFloat(document.getElementById("petSelect").value);
-  const luck = parseFloat(document.getElementById("luckInput").value);
+// Luck calculation
+document.getElementById("luckForm").addEventListener("submit", function (e) {
+  e.preventDefault(); // stop refresh
 
-  if (!luck || luck <= 0) {
-    alert("Please enter a valid luck multiplier.");
-    return;
-  }
+  const pet = document.getElementById("pet").value;
+  const luck = parseFloat(document.getElementById("luck").value);
 
-  const newOdds = baseOdds / luck;
-  const percentChance = (1 / newOdds) * 100;
+  let baseOdds = pet === "forest" ? 1000000 : 1333333;
+  let newOdds = baseOdds / luck;
 
   const resultDiv = document.getElementById("result");
-  resultDiv.innerHTML = `
-    <p><strong>Your Luck:</strong> x${luck.toFixed(2)}</p>
-    <p><strong>Base Odds:</strong> 1 / ${baseOdds.toLocaleString()}</p>
-    <p><strong>Your Odds:</strong> 1 / ${Math.round(newOdds).toLocaleString()}</p>
-    <p style="color:#00ffc6; text-shadow:0 0 8px #00ffc6;">
-      ≈ ${percentChance.toExponential(2)}%
-    </p>
-  `;
-  resultDiv.classList.remove("hidden");
+  resultDiv.innerHTML = `🎲 Your odds: 1 / ${Math.round(newOdds).toLocaleString()}<br>
+                         (Base: 1 / ${baseOdds.toLocaleString()}, Luck x${luck})`;
 });
