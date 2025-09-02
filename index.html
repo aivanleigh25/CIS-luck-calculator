@@ -3,37 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mythic Luck Calculator</title>
+  <title>Mythic Odds Calculator</title>
   <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="app">
-    <h1>✨ Mythic Luck Calculator ✨</h1>
-    <p>Check your odds with your luck multiplier!</p>
+  <div class="container">
+    <h1>🐉 Mythic Odds Calculator</h1>
 
-    <div class="card">
-      <div class="pet-preview fade-in">
-        <img id="petImg" src="png/forest.png" alt="Pet Image">
-      </div>
-
-      <div class="inputs">
-        <label for="petSelect">Choose Mythic:</label>
-        <select id="petSelect" onchange="updatePet()">
-          <option value="forest">🌲 Forest Guardian (1 / 1,000,000)</option>
-          <option value="deck">🃏 Deck Master (1 / 1,333,333)</option>
-        </select>
-
-        <label for="luckInput">Your Luck Multiplier (x):</label>
-        <input type="number" id="luckInput" step="0.01" placeholder="e.g. 14">
-
-        <button onclick="calculateOdds()">🎲 Calculate</button>
-      </div>
-
-      <div class="result fade-in">
-        <p id="oddsText">– Odds will show here –</p>
-        <p id="percentText"></p>
-      </div>
+    <div class="picker">
+      <label for="petSelect">Choose Pet:</label>
+      <select id="petSelect" onchange="updatePet()">
+        <option value="forest">🌲 Forest Guardian</option>
+        <option value="deck">🃏 Deck Master</option>
+      </select>
     </div>
+
+    <div class="image-box">
+      <img id="petImg" src="png/forest.png" alt="Pet Image">
+    </div>
+
+    <div class="slider-box">
+      <label for="luckSlider">Luck Multiplier:</label>
+      <input type="range" id="luckSlider" min="1" max="100" step="0.01" value="1" oninput="updateLuck(this.value)">
+      <span id="luckValue">x1</span>
+    </div>
+
+    <p id="oddsText"></p>
+    <p id="percentText"></p>
+
+    <canvas id="oddsChart" height="120"></canvas>
   </div>
 
   <script src="script.js"></script>
