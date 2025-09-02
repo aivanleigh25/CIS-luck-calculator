@@ -1,94 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mythic Odds Calculator</title>
+  <title>Mythic Odds — Hatch Calculator</title>
 
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header class="top">
+  <div class="site-wrap">
+    <header class="header">
       <div class="brand">
         <h1>Mythic Odds</h1>
-        <small>Forest Guardian • Deck Master</small>
-      </div>
-
-      <div class="theme-row">
-        <!-- theme toggle left out (kept minimal) -->
+        <div class="subtitle">Forest Guardian · Deck Master</div>
       </div>
     </header>
 
-    <main class="grid">
-      <!-- left column: controls + notification -->
+    <main class="main-grid">
+      <!-- LEFT: controls + notif -->
       <section class="left-col card">
-        <div class="control-row">
-          <label class="label">Choose Pet</label>
-          <select id="petSelect" class="select" onchange="onPetChange()">
-            <option value="forest">🌲 Forest Guardian — Base 1 / 1,000,000</option>
-            <option value="deck">🃏 Deck Master — Base 1 / 1,333,333</option>
+        <div class="controls">
+          <label class="lbl">Choose Pet</label>
+          <select id="petSelect" class="select">
+            <option value="forest">🌲 Forest Guardian</option>
+            <option value="deck">🃏 Deck Master</option>
           </select>
-        </div>
 
-        <div class="control-row">
-          <label class="label">Luck Multiplier</label>
-          <div class="slider-row">
-            <input id="luckSlider" type="range" min="1" max="500" step="0.01" value="1" oninput="onSliderInput(this.value)" />
-            <input id="luckInput" type="number" min="1" step="0.01" value="1" class="num-input" oninput="onNumberInput(this.value)" />
+          <label class="lbl">Luck multiplier (decimals allowed)</label>
+          <div class="luck-row">
+            <input id="luckInput" class="num" type="number" step="0.01" min="0.01" value="1" />
+            <input id="luckSlider" type="range" min="0.01" max="500" step="0.01" value="1" />
+          </div>
+
+          <label class="lbl">Total Hatched Eggs (for notif)</label>
+          <input id="totalHatches" class="num" type="number" min="0" step="1" value="1" />
+
+          <div class="sim-row">
+            <input id="simCount" class="num small" type="number" min="1" step="1" value="1" />
+            <button id="simBtn" class="btn">Simulate Hatch</button>
+            <button id="simManyBtn" class="btn alt">Simulate N</button>
           </div>
         </div>
 
-        <div class="control-row small">
-          <label class="label">Total Hatched Eggs (for notif)</label>
-          <input id="totalHatches" type="number" min="0" step="1" value="1" class="num-input" oninput="updateAll()" />
-        </div>
-
+        <!-- compact result card -->
         <div class="result-card">
           <div class="result-left">
-            <div class="result-title">Player's Chances</div>
-            <div id="playersOdds" class="result-big">—</div>
+            <div class="label-muted">Player's Chances</div>
+            <div id="playersOdds" class="big">—</div>
             <div id="percentText" class="muted">—</div>
           </div>
 
           <div class="result-right">
-            <div class="muted small">Base Chance</div>
+            <div class="label-muted">Base Chance</div>
             <div id="baseText" class="muted">—</div>
 
-            <div style="height:8px"></div>
+            <div style="height:10px"></div>
 
-            <div class="muted small">Current Luck</div>
+            <div class="label-muted">Current Luck</div>
             <div id="luckText" class="muted">x1</div>
           </div>
         </div>
 
-        <div id="notif" class="discord-card">
-          <div class="notif-left">
-            <img id="notifEgg" src="png/forest.png" alt="pet" />
-          </div>
-          <div class="notif-right">
-            <div class="notif-title"><span id="notifPlayer">Player</span> Has Hatched A Mythic Pet!</div>
-            <div class="notif-line"><strong>Egg:</strong> <span id="notifEggName">Forest Egg</span></div>
-            <div class="notif-line"><strong>Pet:</strong> <span id="notifPetName">Forest Guardian</span></div>
-            <div class="notif-line"><strong>Evolution:</strong> <span id="notifEvo">Normal</span></div>
-
-            <div class="notif-stats">
-              <div><small>Total Hatched Eggs:</small><div id="notifTotal">1</div></div>
-              <div><small>Player's Chances:</small><div id="notifChance">1 / —</div></div>
-              <div><small>Base Chances:</small><div id="notifBase">1 / —</div></div>
+        <!-- Discord-style minimal notification card -->
+        <div id="notifCard" class="notif-card hidden">
+          <div class="notif-bar"></div>
+          <div class="notif-body">
+            <img id="notifImg" src="png/forest.png" alt="pet">
+            <div class="notif-info">
+              <div id="notifPet" class="notif-pet">Forest Guardian</div>
+              <div class="notif-small">
+                <span id="notifTotal">Total Hatched: 1</span>
+                <span class="dot">•</span>
+                <span id="notifOdds">1 / —</span>
+              </div>
+              <div id="notifBase" class="notif-mini">Base 1 / —</div>
             </div>
           </div>
         </div>
 
+        <div id="simResult" class="sim-result hidden"></div>
       </section>
 
+      <!-- RIGHT: preview + chart -->
       <section class="right-col">
         <div class="pet-preview card">
-          <img id="petImg" src="png/forest.png" alt="pet" />
-          <div class="pet-meta">
-            <div id="petName">Forest Guardian</div>
+          <img id="petPreviewImg" src="png/forest.png" alt="pet" />
+          <div class="preview-meta">
+            <div id="petName" class="pet-name">Forest Guardian</div>
             <div id="petBaseSmall" class="muted">Base 1 / 1,000,000</div>
           </div>
         </div>
@@ -100,7 +101,7 @@
     </main>
 
     <footer class="foot muted">
-      Tip: move the slider or type your luck to instantly update the graph & notification.
+      Tip: Type decimal luck if you want (e.g. 3.42). Slider and number input stay synced.
     </footer>
   </div>
 
