@@ -1,104 +1,108 @@
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+// Pet base odds
+const pets = {
+  forest: { name: "Forest Guardian", egg: "Forest Egg", base: 1000000 },
+  deck: { name: "Deck Master", egg: "Magic Egg", base: 1333333 }
+};
+
+// Elements
+const petSelect = document.getElementById("pet");
+const luckInput = document.getElementById("luck");
+const notification = document.getElementById("notification");
+const hatchBtn = document.getElementById("hatchBtn");
+
+let chart;
+
+// Load saved stats
+let totalHatched = parseInt(localStorage.getItem("totalHatched")) || 0;
+let mythicsHatched = parseInt(localStorage.getItem("mythicsHatched")) || 0;
+
+// Save stats
+function saveStats() {
+  localStorage.setItem("totalHatched", totalHatched);
+  localStorage.setItem("mythicsHatched", mythicsHatched);
 }
 
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-  color: #fff;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// Hatch function
+function hatchEgg() {
+  totalHatched++;
+
+  const petKey = petSelect.value;
+  const pet = pets[petKey];
+  const luck = parseFloat(luckInput.value) || 1;
+  const odds = pet.base / luck;
+
+  // Random roll
+  const roll = Math.random() * odds;
+  let hatchedMythic = false;
+
+  if (roll < 1) {
+    hatchedMythic = true;
+    mythicsHatched++;
+  }
+
+  saveStats();
+  updateNotification(pet, luck, odds, hatchedMythic);
+  updateChart(pet.base);
 }
 
-.container {
-  width: 90%;
-  max-width: 900px;
-  text-align: center;
+// Update notification text
+function updateNotification(pet, luck, odds, hatchedMythic) {
+  const playerOdds = Math.round(pet.base / luck).toLocaleString();
+  const baseOdds = pet.base.toLocaleString();
+
+  notification.innerHTML = `
+    <h2>Player Has Hatched A ${hatchedMythic ? "⭐ Mythic Pet!" : "Pet"}!</h2>
+    <p><strong>Egg:</strong> ${pet.egg}</p>
+    <p><strong>Pet:</strong> ${pet.name}</p>
+    <p><strong>Evolution:</strong> Normal</p>
+    <p><strong>Total Hatched Eggs:</strong> ${totalHatched.toLocaleString()}</p>
+    <p><strong>Mythics Hatched:</strong> ${mythicsHatched.toLocaleString()}</p>
+    <p><strong>Player's Chances:</strong> 1 / ${playerOdds}</p>
+    <p><strong>Base Chances:</strong> 1 / ${baseOdds}</p>
+  `;
+  notification.classList.remove("hidden");
 }
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 2rem;
-  color: #00e6e6;
-  text-shadow: 0 0 15px rgba(0, 230, 230, 0.6);
+// Update graph
+function updateChart(base) {
+  const labels = [];
+  const data = [];
+
+  for (let i = 1; i <= 50; i++) {
+    labels.push("x" + i);
+    data.push(base / i);
+  }
+
+  if (chart) chart.destroy();
+
+  const ctx = document.getElementById("oddsChart").getContext("2d");
+  chart = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Hatch Odds (1 in N)",
+        data: data,
+        borderColor: "#00e6e6",
+        backgroundColor: "rgba(0, 230, 230, 0.2)",
+        fill: true,
+        tension: 0.3
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { labels: { color: "#fff" } } },
+      scales: {
+        x: { ticks: { color: "#fff" } },
+        y: { ticks: { color: "#fff" } }
+      }
+    }
+  });
 }
 
-.form {
-  background: rgba(255, 255, 255, 0.05);
-  padding: 20px;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-}
+// Events
+hatchBtn.addEventListener("click", hatchEgg);
 
-.form label {
-  display: block;
-  margin: 10px 0 5px;
-  font-size: 1rem;
-}
-
-.form select,
-.form input {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  width: 80%;
-  font-size: 1rem;
-  margin-bottom: 15px;
-  text-align: center;
-}
-
-/* Hatch button */
-button {
-  padding: 10px 20px;
-  background: #00e6e6;
-  color: #000;
-  border: none;
-  border-radius: 10px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-button:hover {
-  background: #00b3b3;
-}
-
-/* Notification card */
-.notification {
-  background: #2c2f33;
-  border-left: 5px solid #7289da;
-  padding: 20px;
-  border-radius: 12px;
-  margin-bottom: 30px;
-  text-align: left;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  animation: fadeIn 0.5s ease-in-out;
-}
-
-.notification.hidden {
-  display: none;
-}
-
-.notification h2 {
-  font-size: 1.2rem;
-  margin-bottom: 10px;
-  color: #00ffcc;
-}
-
-/* Graph */
-.graph-card {
-  background: rgba(0,0,0,0.4);
-  border-radius: 16px;
-  padding: 20px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.5);
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+// Init
+updateNotification(pets[petSelect.value], 1, pets[petSelect.value].base, false);
+updateChart(pets[petSelect.value].base);
