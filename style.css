@@ -1,101 +1,80 @@
 body {
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #f1f5f9;
+  color: #f8fafc;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  margin: 0;
+}
+
+.container {
+  background: #1e293b;
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 0 0 25px rgba(56, 189, 248, 0.4);
+  width: 420px;
+  text-align: center;
+  animation: fade-in 0.6s ease-in-out;
 }
 
 h1 {
-  margin-bottom: 8px;
-  color: #38bdf8;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-}
-
-p {
-  margin: 4px 0;
-}
-
-.app {
-  text-align: center;
-}
-
-.card {
-  background: #1e293b;
-  padding: 24px;
-  border-radius: 20px;
-  max-width: 420px;
-  margin: 0 auto;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-  animation: slide-up 0.6s ease;
-}
-
-label {
-  display: block;
-  margin: 10px 0 5px;
-  font-weight: 500;
-}
-
-input, select, button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
+  font-size: 1.5rem;
   margin-bottom: 15px;
-  font-size: 1em;
+  color: #38bdf8;
 }
 
-input, select {
-  background: #334155;
-  color: #f1f5f9;
+.picker, .slider-box {
+  margin: 15px 0;
 }
 
-button {
-  background: #38bdf8;
-  color: #0f172a;
-  font-weight: bold;
-  cursor: pointer;
-  transition: transform 0.2s, background 0.2s;
+.image-box {
+  margin: 15px 0;
 }
 
-button:hover {
-  background: #0ea5e9;
-  transform: scale(1.05);
-}
-
-.pet-preview img {
-  max-width: 180px;
-  margin: 15px auto;
-  display: block;
+#petImg {
+  width: 180px;
+  height: auto;
   border-radius: 16px;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
-  transition: transform 0.4s ease;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.pet-preview img:hover {
-  transform: rotate(2deg) scale(1.05);
+#petImg.fade-in {
+  opacity: 1;
+  transform: scale(1);
 }
 
-.result {
-  margin-top: 15px;
-  font-size: 1.1em;
-  color: #fbbf24;
+#luckSlider {
+  width: 70%;
 }
 
-/* Animations */
+#luckValue {
+  font-weight: bold;
+  margin-left: 10px;
+  color: #22c55e;
+}
+
+#oddsText, #percentText {
+  margin-top: 10px;
+  font-size: 0.9rem;
+}
+
 @keyframes fade-in {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-.fade-in {
-  animation: fade-in 0.5s ease forwards;
+/* Pulse effect for highlight point */
+.pulse-point {
+  animation: pulse 1.5s infinite;
 }
 
-@keyframes slide-up {
-  from { transform: translateY(20px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
+@keyframes pulse {
+  0% { r: 6; opacity: 1; }
+  50% { r: 12; opacity: 0.5; }
+  100% { r: 6; opacity: 1; }
 }
