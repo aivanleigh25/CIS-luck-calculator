@@ -1,36 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mythic Hatch Calculator</title>
-  <link rel="stylesheet" href="style.css">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Luck Odds Calculator</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>🥚 Mythic Hatch Calculator</h1>
+    <h1>Luck Odds Calculator</h1>
+    
+    <form id="calcForm">
+      <div class="form-group">
+        <label for="petSelect">Choose Pet:</label>
+        <select id="petSelect">
+          <option value="1000000">🌲 Forest Guardian (1 / 1,000,000)</option>
+          <option value="1333333">🃏 Deck Master (1 / 1,333,333)</option>
+        </select>
+      </div>
 
-    <div class="form">
-      <label for="pet">Choose Pet:</label>
-      <select id="pet">
-        <option value="forest">🌲 Forest Guardian</option>
-        <option value="deck">🃏 Deck Master</option>
-      </select>
+      <div class="form-group">
+        <label for="luckInput">Luck Multiplier:</label>
+        <input type="number" id="luckInput" step="0.01" placeholder="Enter your luck (e.g. 14)" required />
+      </div>
 
-      <label for="luck">Luck Multiplier:</label>
-      <input type="text" id="luck" placeholder="Type your luck (e.g. 3.42)">
-      
-      <button id="hatchBtn">Hatch Egg</button>
-    </div>
+      <button type="submit" class="calc-btn">Calculate</button>
+    </form>
 
-    <!-- Hatch notification -->
-    <div id="notification" class="notification hidden"></div>
-
-    <!-- Graph -->
-    <div class="graph-card">
-      <canvas id="oddsChart"></canvas>
-    </div>
+    <div id="result" class="result-card hidden"></div>
   </div>
 
   <script src="script.js"></script>
