@@ -1,6 +1,6 @@
 body {
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #1e293b, #0f172a);
+  font-family: "Poppins", sans-serif;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #f1f5f9;
   display: flex;
   justify-content: center;
@@ -9,39 +9,43 @@ body {
   margin: 0;
 }
 
-.app {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 16px;
-  text-align: center;
-  max-width: 400px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-}
-
 h1 {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   color: #38bdf8;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 
 p {
-  margin: 6px 0;
+  margin: 4px 0;
 }
 
-.calculator {
-  margin-top: 20px;
+.app {
+  text-align: center;
+}
+
+.card {
+  background: #1e293b;
+  padding: 24px;
+  border-radius: 20px;
+  max-width: 420px;
+  margin: 0 auto;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  animation: slide-up 0.6s ease;
 }
 
 label {
   display: block;
   margin: 10px 0 5px;
+  font-weight: 500;
 }
 
 input, select, button {
   width: 100%;
-  padding: 8px;
-  border-radius: 8px;
+  padding: 10px;
+  border-radius: 10px;
   border: none;
   margin-bottom: 15px;
+  font-size: 1em;
 }
 
 input, select {
@@ -54,23 +58,44 @@ button {
   color: #0f172a;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: transform 0.2s, background 0.2s;
 }
 
 button:hover {
   background: #0ea5e9;
+  transform: scale(1.05);
 }
 
-.pet-image img {
-  max-width: 200px;
+.pet-preview img {
+  max-width: 180px;
   margin: 15px auto;
   display: block;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+  transition: transform 0.4s ease;
+}
+
+.pet-preview img:hover {
+  transform: rotate(2deg) scale(1.05);
 }
 
 .result {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 1.1em;
   color: #fbbf24;
+}
+
+/* Animations */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fade-in 0.5s ease forwards;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
