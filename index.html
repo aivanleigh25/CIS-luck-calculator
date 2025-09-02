@@ -1,38 +1,107 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Mythic Odds Calculator</title>
-  <link rel="stylesheet" href="style.css">
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>🐉 Mythic Odds Calculator</h1>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <h1>Mythic Odds</h1>
+        <small>Forest Guardian • Deck Master</small>
+      </div>
 
-    <div class="picker">
-      <label for="petSelect">Choose Pet:</label>
-      <select id="petSelect" onchange="updatePet()">
-        <option value="forest">🌲 Forest Guardian</option>
-        <option value="deck">🃏 Deck Master</option>
-      </select>
-    </div>
+      <div class="theme-row">
+        <!-- theme toggle left out (kept minimal) -->
+      </div>
+    </header>
 
-    <div class="image-box">
-      <img id="petImg" src="png/forest.png" alt="Pet Image">
-    </div>
+    <main class="grid">
+      <!-- left column: controls + notification -->
+      <section class="left-col card">
+        <div class="control-row">
+          <label class="label">Choose Pet</label>
+          <select id="petSelect" class="select" onchange="onPetChange()">
+            <option value="forest">🌲 Forest Guardian — Base 1 / 1,000,000</option>
+            <option value="deck">🃏 Deck Master — Base 1 / 1,333,333</option>
+          </select>
+        </div>
 
-    <div class="slider-box">
-      <label for="luckSlider">Luck Multiplier:</label>
-      <input type="range" id="luckSlider" min="1" max="100" step="0.01" value="1" oninput="updateLuck(this.value)">
-      <span id="luckValue">x1</span>
-    </div>
+        <div class="control-row">
+          <label class="label">Luck Multiplier</label>
+          <div class="slider-row">
+            <input id="luckSlider" type="range" min="1" max="500" step="0.01" value="1" oninput="onSliderInput(this.value)" />
+            <input id="luckInput" type="number" min="1" step="0.01" value="1" class="num-input" oninput="onNumberInput(this.value)" />
+          </div>
+        </div>
 
-    <p id="oddsText"></p>
-    <p id="percentText"></p>
+        <div class="control-row small">
+          <label class="label">Total Hatched Eggs (for notif)</label>
+          <input id="totalHatches" type="number" min="0" step="1" value="1" class="num-input" oninput="updateAll()" />
+        </div>
 
-    <canvas id="oddsChart" height="120"></canvas>
+        <div class="result-card">
+          <div class="result-left">
+            <div class="result-title">Player's Chances</div>
+            <div id="playersOdds" class="result-big">—</div>
+            <div id="percentText" class="muted">—</div>
+          </div>
+
+          <div class="result-right">
+            <div class="muted small">Base Chance</div>
+            <div id="baseText" class="muted">—</div>
+
+            <div style="height:8px"></div>
+
+            <div class="muted small">Current Luck</div>
+            <div id="luckText" class="muted">x1</div>
+          </div>
+        </div>
+
+        <div id="notif" class="discord-card">
+          <div class="notif-left">
+            <img id="notifEgg" src="png/forest.png" alt="pet" />
+          </div>
+          <div class="notif-right">
+            <div class="notif-title"><span id="notifPlayer">Player</span> Has Hatched A Mythic Pet!</div>
+            <div class="notif-line"><strong>Egg:</strong> <span id="notifEggName">Forest Egg</span></div>
+            <div class="notif-line"><strong>Pet:</strong> <span id="notifPetName">Forest Guardian</span></div>
+            <div class="notif-line"><strong>Evolution:</strong> <span id="notifEvo">Normal</span></div>
+
+            <div class="notif-stats">
+              <div><small>Total Hatched Eggs:</small><div id="notifTotal">1</div></div>
+              <div><small>Player's Chances:</small><div id="notifChance">1 / —</div></div>
+              <div><small>Base Chances:</small><div id="notifBase">1 / —</div></div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <section class="right-col">
+        <div class="pet-preview card">
+          <img id="petImg" src="png/forest.png" alt="pet" />
+          <div class="pet-meta">
+            <div id="petName">Forest Guardian</div>
+            <div id="petBaseSmall" class="muted">Base 1 / 1,000,000</div>
+          </div>
+        </div>
+
+        <div class="chart-card card">
+          <canvas id="oddsChart"></canvas>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot muted">
+      Tip: move the slider or type your luck to instantly update the graph & notification.
+    </footer>
   </div>
 
   <script src="script.js"></script>
