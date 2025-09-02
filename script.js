@@ -2,12 +2,12 @@ const pets = {
   forest: {
     name: "Forest Guardian",
     base: 1000000,
-    img: "forest.png"
+    img: "png/forest.png"
   },
   deck: {
     name: "Deck Master",
     base: 1333333,
-    img: "deck.png"
+    img: "png/deck.png"
   }
 };
 
@@ -27,7 +27,7 @@ function calculateOdds() {
   const odds = 1 / finalChance;
   const percent = (finalChance * 100).toFixed(6);
 
-  // Update text
+  // Update text 
   document.getElementById("oddsText").innerText = 
     `🎲 With x${luck} luck, your odds for ${pet.name} are ~1 / ${Math.round(odds).toLocaleString()}`;
   document.getElementById("percentText").innerText = 
