@@ -1,33 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Luck Odds Calculator</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luck Calculator</title>
+  <style>
+    /* Background + floating bubbles */
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #0a0f1e, #000);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .bubbles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .bubbles span {
+      position: absolute;
+      bottom: -150px;
+      background: rgba(0, 255, 200, 0.3);
+      border-radius: 50%;
+      animation: rise 20s linear infinite;
+    }
+
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0.5; }
+      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    }
+
+    /* Card */
+    .container {
+      background: rgba(15, 15, 35, 0.9);
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 0 25px rgba(0, 255, 200, 0.6);
+      text-align: center;
+      z-index: 1;
+      width: 360px;
+      animation: fadeIn 1s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      font-size: 1.6rem;
+      color: #0ff;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #0ff;
+    }
+
+    label {
+      display: block;
+      margin: 1rem 0 0.5rem;
+    }
+
+    /* Neon dropdown & input */
+    select, input {
+      width: 100%;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      background: #111;
+      color: #0ff;
+      box-shadow: inset 0 0 8px #0ff;
+      transition: 0.3s;
+      outline: none;
+    }
+
+    select:focus, input:focus {
+      box-shadow: 0 0 15px #0ff;
+      transform: scale(1.03);
+    }
+
+    /* Cool select option */
+    option {
+      background: #000;
+      color: #0ff;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.7rem;
+      border: none;
+      border-radius: 8px;
+      margin-top: 0.5rem;
+      font-size: 1rem;
+      background: #0ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #08f7fe;
+      box-shadow: 0 0 10px #0ff;
+      transform: translateY(-2px);
+    }
+
+    .result {
+      margin-top: 1rem;
+      font-size: 1.2rem;
+      color: #0ff;
+      text-shadow: 0 0 8px #0ff;
+      min-height: 40px;
+    }
+  </style>
 </head>
 <body>
+  <div class="bubbles"></div> <!-- animated bubbles background -->
+
   <div class="container">
-    <h1>Luck Odds Calculator</h1>
-    
-    <form id="calcForm">
-      <div class="form-group">
-        <label for="petSelect">Choose Pet:</label>
-        <select id="petSelect">
-          <option value="1000000">🌲 Forest Guardian (1 / 1,000,000)</option>
-          <option value="1333333">🃏 Deck Master (1 / 1,333,333)</option>
-        </select>
-      </div>
+    <h1>✨ Luck Calculator ✨</h1>
 
-      <div class="form-group">
-        <label for="luckInput">Luck Multiplier:</label>
-        <input type="number" id="luckInput" step="0.01" placeholder="Enter your luck (e.g. 14)" required />
-      </div>
+    <form id="luckForm">
+      <label for="pet">Choose Pet:</label>
+      <select id="pet" required>
+        <option value="forest">🌲 Forest Guardian (1 / 1,000,000)</option>
+        <option value="deck">🃏 Deck Master (1 / 1,333,333)</option>
+      </select>
 
-      <button type="submit" class="calc-btn">Calculate</button>
+      <label for="luck">Luck Multiplier:</label>
+      <input type="number" id="luck" step="0.01" min="1" placeholder="e.g. 14" required>
+
+      <button type="submit">Calculate</button>
     </form>
 
-    <div id="result" class="result-card hidden"></div>
+    <div id="result" class="result"></div>
   </div>
 
   <script src="script.js"></script>
