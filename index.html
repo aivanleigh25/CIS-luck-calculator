@@ -1,156 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Luck Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>✨ Luck Calculator ✨</title>
+  <script src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"></script>
   <style>
+    :root {
+      --bg: linear-gradient(120deg, #0f1115, #0b0d12 60%);
+      --panel: #171923;
+      --panel-2: #1f2230;
+      --text: #eef2ff;
+      --accent: #7c9cff;
+      --secondary: #51e1a7;
+      --border: #2b3040;
+      --shadow: 0 8px 30px rgba(0, 0, 0, 0.45);
+    }
+
     body {
       margin: 0;
-      height: 100vh;
-      font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at top, #0a0f1e, #000);
-      color: #fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
       display: flex;
-      align-items: center;
       justify-content: center;
-      overflow: hidden;
+      align-items: center;
+      overflow-x: hidden;
+      position: relative;
     }
 
     .bubbles {
-      position: absolute;
+      position: fixed;
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      overflow: hidden;
-      z-index: 0;
+      z-index: -1;
+      pointer-events: none;
     }
 
     .bubbles span {
       position: absolute;
-      bottom: -150px;
-      background: rgba(0, 255, 200, 0.3);
+      background: rgba(124, 156, 255, 0.15);
       border-radius: 50%;
-      animation: rise 20s linear infinite;
+      animation: float 15s infinite ease-in-out;
     }
 
-    @keyframes rise {
-      0% { transform: translateY(0) scale(1); opacity: 0.5; }
-      100% { transform: translateY(-120vh) scale(1.5); opacity: 0; }
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0.4); opacity: 0.5; }
+      50% { transform: translateY(50vh) scale(0.8); opacity: 0.8; }
+      100% { transform: translateY(-100vh) scale(0.4); opacity: 0.3; }
     }
 
-    /* Card */
     .container {
-      background: rgba(15, 15, 35, 0.9);
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 0 25px rgba(0, 255, 200, 0.6);
       text-align: center;
-      z-index: 1;
-      width: 360px;
-      animation: fadeIn 1s ease;
+      padding: 2rem;
+      max-width: 700px; /* Balanced size, not too small or large */
+      width: 90%;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      animation: slideIn 0.5s ease-out;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes slideIn {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
     }
 
     h1 {
-      font-size: 1.6rem;
-      color: #0ff;
-      margin-bottom: 1rem;
-      text-shadow: 0 0 10px #0ff;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
     }
 
-    label {
-      display: block;
-      margin: 1rem 0 0.5rem;
+    .form-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
     }
 
-    /* Neon dropdown & input */
-    select, input {
-      width: 100%;
-      padding: 0.7rem;
-      border: none;
-      border-radius: 8px;
-      margin-bottom: 1rem;
+    .custom-select {
+      appearance: none;
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
       font-size: 1rem;
-      background: #111;
-      color: #0ff;
-      box-shadow: inset 0 0 8px #0ff;
-      transition: 0.3s;
-      outline: none;
-    }
-
-    select:focus, input:focus {
-      box-shadow: 0 0 15px #0ff;
-      transform: scale(1.03);
-    }
-
-    /* Cool select option */
-    option {
-      background: #000;
-      color: #0ff;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.7rem;
-      border: none;
-      border-radius: 8px;
-      margin-top: 0.5rem;
-      font-size: 1rem;
-      background: #0ff;
-      color: #000;
-      font-weight: bold;
       cursor: pointer;
-      transition: 0.3s;
+      transition: all 0.2s ease;
+      width: 100%;
+      max-width: 250px;
     }
 
-    button:hover {
-      background: #08f7fe;
-      box-shadow: 0 0 10px #0ff;
+    .custom-select:hover {
+      background: #252a3a;
       transform: translateY(-2px);
     }
 
-    .result {
-      margin-top: 1rem;
-      font-size: 1.2rem;
-      color: #0ff;
-      text-shadow: 0 0 8px #0ff;
-      min-height: 40px;
-    }
-    .result img.pet-img {
-      display: block;
-      margin: 0.5rem auto 0;
-      max-width: 120px;
-      height: auto;
+    .custom-select option {
+      background: var(--panel);
+      color: var(--text);
+      padding: 0.5rem;
     }
 
+    .input-field {
+      background: var(--panel-2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.75rem;
+      border-radius: 12px;
+      width: 120px;
+      transition: border-color 0.2s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    button {
+      background: var(--accent);
+      color: #0a1024;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    button:hover {
+      background: #6484e0;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(124, 156, 255, 0.3);
+    }
+
+    #result {
+      margin-top: 1.5rem;
+      font-size: 1.2rem;
+      color: var(--secondary);
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .pet-img {
+      max-width: 120px;
+      height: auto;
+      margin-top: 1rem;
+      border-radius: 8px;
+      transition: transform 0.2s ease;
+    }
+
+    .pet-img:hover {
+      transform: scale(1.05);
+    }
+
+    .spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #fff;
+      border-top: 3px solid var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-left: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+        width: 92%;
+      }
+      h1 {
+        font-size: 1.7rem;
+      }
+      .form-group {
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .custom-select, .input-field {
+        width: 100%;
+        max-width: none;
+      }
+      .pet-img {
+        max-width: 100px;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="bubbles"></div> <!-- animated bubbles background -->
-
+  <div class="bubbles"></div>
   <div class="container">
     <h1>✨ Luck Calculator ✨</h1>
-
-    <form id="luckForm">
-      <label for="pet">Choose Pet:</label>
-      <select id="pet" required>
-        <option value="forest">🌲 Forest Guardian (1 / 1,000,000)</option>
-        <option value="deck">🃏 Deck Master (1 / 1,333,333)</option>
-      </select>
-
-      <label for="luck">Luck Multiplier:</label>
-      <input type="number" id="luck" step="0.01" min="1" placeholder="e.g. 14" required>
-
-      <button type="submit">Calculate</button>
+    <form id="luckForm" class="space-y-4">
+      <div class="form-group">
+        <label>
+          Choose Pet:
+          <select id="pet" class="custom-select">
+            <option value="forest">🌲 Forest Guardian (1 / 1,000,000)</option>
+            <option value="deck">🃏 Deck Master (1 / 1,333,333)</option>
+          </select>
+        </label>
+        <label>
+          Luck Multiplier:
+          <input type="number" id="luck" min="1" step="0.1" class="input-field" placeholder="e.g., 2.5" required>
+        </label>
+      </div>
+      <button type="submit">
+        Calculate
+        <span id="spinner" class="spinner"></span>
+      </button>
     </form>
-
-    <div id="result" class="result"></div>
+    <div id="result" class="mt-4 text-lg"></div>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
